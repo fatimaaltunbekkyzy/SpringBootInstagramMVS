@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+
+        .profile-container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .profile-info {
+            text-align: center;
+        }
+
+        .profile-info h2 {
+            margin: 10px 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .profile-info p {
+            color: #777;
+            font-size: 16px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            display: block;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-container">
+    <!--    <img th:src="${user.profileImageUrl != null} ? ${user.profileImageUrl} : '@{/images/default-profile.png}'" alt="Profile Image" class="profile-image">-->
+
+    <div class="profile-info">
+        <p><strong>Username:</strong> <span th:text="${user.username}">username</span></p>
+        <!-- Кошумча маалыматтарды да ушул жерге кошсо болот -->
+    </div>
+
+    <a href="/users/search" class="back-link">← Return to search</a>
+</div>
+
+</body>
+</html>

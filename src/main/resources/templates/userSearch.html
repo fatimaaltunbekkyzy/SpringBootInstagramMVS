@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Издөө Натыйжалары</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .user-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .user-card:hover {
+            background-color: #eef;
+        }
+        .no-results {
+            color: red;
+        }
+        a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Search Results</h2>
+
+<div th:if="${users.isEmpty()}" class="no-results">
+    <p>User not found.</p>
+</div>
+
+<div th:each="user : ${users}" class="user-card">
+    <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
+    <!-- Мисалы, профилине ссылка -->
+    <p><a th:href="@{'/users/simple-profile/' + ${user.id}}">View profile</a></p>
+</div>
+
+</body>
+</html>
