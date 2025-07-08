@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("posts")
+@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
     private final UserService userService;
@@ -22,133 +22,51 @@ public class PostController {
         this.userService = userService;
     }
 
+    @PostMapping("/savePost")
+    public String savePost(@ModelAttribute("newPost") Post post,
+                           @RequestParam("imageUrls") List<String> imageUrls) {
+        if (imageUrls == null || imageUrls.isEmpty() || imageUrls.stream().allMatch(String::isBlank)) {
+            return "redirect:/posts/new?error=missingImage";
+        }
 
+        User currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/signin/";
+        }
 
+        post.setCratedAt(LocalDateTime.now());
+        post.setUser(currentUser);
+        post.setLikeCount(0);
 
+        List<String> cleanedImageUrls = imageUrls.stream()
+                .filter(url -> url != null && !url.isBlank())
+                .toList();
 
+        post.setImages(cleanedImageUrls);
+        postService.save(post);
 
+        return "redirect:/profile/" + currentUser.getId();
+    }
+    @GetMapping("/new")
+    public String createPostPage(Model model) {
+        model.addAttribute("newPost", new Post());
+        return "newPost";
 
+     }
 
+    // 🟠 UPDATE PAGE (формага өтүү)
+    @GetMapping("/editPost/{postId}")
+    public String editPage(@PathVariable Long postId, Model model) {
+        Post post = postService.getPostById(postId);
+        model.addAttribute("post", post);
+        return "editPost";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @PostMapping("/savePost")
-//    public String savePost(@ModelAttribute("newPost") Post post,
-//                           @RequestParam("imageUrls") List<String> imageUrls) {
-//        if (imageUrls == null || imageUrls.isEmpty() || imageUrls.stream().allMatch(String::isBlank)) {
-//            return "redirect:/posts/new?error=missingImage";
-//        }
-//
-//        User currentUser = userService.getCurrentUser();
-//        if (currentUser == null) {
-//            return "redirect:/signin/";
-//        }
-//
-//        post.setCratedAt(LocalDateTime.now());
-//        post.setUser(currentUser);
-//        post.setLikeCount(0);
-//
-//        List<String> cleanedImageUrls = imageUrls.stream()
-//                .filter(url -> url != null && !url.isBlank())
-//                .toList();
-//
-//        post.setImages(cleanedImageUrls);
-//        postService.save(post);
-//
-//        return "redirect:/profile/" + currentUser.getId();
-//
-//
-////    @PostMapping("/savePost")
-////    public String savePost(@ModelAttribute("newPost") Post post,
-////                           @RequestParam("imageUrls") List<String> imageUrls) {
-////
-////        if (imageUrls == null || imageUrls.isEmpty() || imageUrls.stream().allMatch(String::isBlank)) {
-////            return "redirect:/posts/new?error=missingImage";
-////        }
-////
-////        User currentUser = userService.getCurrentUser();
-////        if (currentUser == null) {
-////            return "redirect:/signin";
-////        }
-////        post.setCratedAt(LocalDateTime.now());
-////        post.setUser(currentUser);
-////        post.setLikeCount(0);
-////
-////        List<String> cleanedImageUrls = imageUrls.stream()
-////                .filter(url -> url != null && !url.isBlank())
-////                .toList();
-////
-////        post.setImages(cleanedImageUrls);
-////        postService.save(post);
-////        return "redirect:/profile/" + currentUser.getId();
-//}
-//    // 🟠 UPDATE PAGE (формага өтүү)
-//    @GetMapping("/editPost/{postId}")
-//    public String editPage(@PathVariable Long postId, Model model) {
-//        Post post = postService.getPostById(postId);
-//        model.addAttribute("post", post);
-//        return "editPost";
-//    }
-//    @GetMapping("/new")
-//    public String createPostPage(Model model) {
-//        model.addAttribute("newPost", new Post());
-//        return "newPost"; // templates/newPost
-//
-////    @GetMapping("/new")
-////    public String createPostPage(Model model) {
-////        model.addAttribute("newPost", new Post());
-////        return "newPost";
-////
-//     }
-//
-//    @PostMapping("/posts/{id}/update")
-//    public String updatePost(@PathVariable Long id,
-//                             @RequestParam String description) {
-//        postService.updatePost(id, description);
-//        return "redirect:/profile";
-//    }
+    }
+    @PostMapping("/posts/{id}/update")
+    public String updatePost(@PathVariable Long id,
+                             @RequestParam String description) {
+        postService.updatePost(id, description);
+        return "redirect:/profile";
+    }
 
 }

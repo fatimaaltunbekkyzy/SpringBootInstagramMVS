@@ -1,5 +1,6 @@
 package peaksoft.springbootinstagrammvs.controller;
 
+import jakarta.persistence.NoResultException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import peaksoft.springbootinstagrammvs.service.UserService;
 import java.util.List;
 
 @Controller
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
     private final FollowerService followerService;
@@ -34,7 +35,7 @@ public class UserController {
         return "signin";
     }
 
-    @PostMapping("/singIn")
+    @PostMapping("/signIn")
     public String signIn(@ModelAttribute("user") User user, Model model) {
         User foundUser = userService.signIn(user);
 
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     // Save new user
-    @PostMapping("/savePost")
+    @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/users/all";
@@ -84,65 +85,4 @@ public class UserController {
 
         return "profilePage";
 
-
-
-
-
-
-
-
-
-
-
-
-//    }
-//    @GetMapping("/search")
-//    public String searchUsers(@RequestParam("keyword") String keyword, Model model) {
-//        List<User> users = userService.search(keyword);
-//        model.addAttribute("users", users);
-//        return "userSearch"; // Бул баракчада users тизмеси көрсөтүлөт
-//    }
-//    @GetMapping("/simple-profile/{id}")
-//    public String viewProfile(@PathVariable Long id, Model model) {
-//        User user = userService.findById(id);
-//        model.addAttribute("user", user);
-//        return "userProfile"; // же башка баракчанын аталышы
-//    }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //    @GetMapping("/profile/{userId}")
-//    public String userProfile(@PathVariable("userId") Long userId, Model model, HttpSession session) {
-//        User profile = userService.getUserById(userId);
-//        model.addAttribute("user", profile);
-//
-//        UserInfo userInfo = profile.getUserInfo();
-//        model.addAttribute("userInfo", userInfo);
-//
-//        Follower follower = profile.getFollower();
-//        model.addAttribute("follower", follower);
-
-//        List<Post> posts = postService.getAllPostsByUserId(userId);
-//        model.addAttribute("posts", posts);
-
-//        User currentUser = (User) session.getAttribute("currentUser");
-//        boolean isSubscribed = false; // default
-//        if (currentUser != null && !currentUser.getId().equals(userId)) {
-//            isSubscribed = followerService.isSubscribed(currentUser.getId(), userId);
-//        }
-//        model.addAttribute("isSubscribed", isSubscribed);
-
-//        return "profilePage";
-}
+}}
