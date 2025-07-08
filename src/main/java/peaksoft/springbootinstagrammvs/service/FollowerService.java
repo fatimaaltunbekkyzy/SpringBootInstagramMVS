@@ -1,5 +1,8 @@
 package peaksoft.springbootinstagrammvs.service;
 
+import peaksoft.springbootinstagrammvs.entites.Follower;
+
 public interface FollowerService {
-    boolean isSubscribed(Long id, Long userId);
+    void save(Follower follower);
+
 }

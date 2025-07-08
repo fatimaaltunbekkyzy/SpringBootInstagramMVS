@@ -21,12 +21,13 @@ public class UserController {
     private final FollowerService followerService;
     private final PostService postService;
 
-    public UserController(UserService userService, FollowerService followerService, PostService postService) {
+    public UserController(UserService userService, FollowerService followerService,PostService postService) {
         this.userService = userService;
         this.followerService = followerService;
         this.postService = postService;
 
-}
+    }
+
     @GetMapping()
     public String signInForm(Model model) {
         model.addAttribute("user", new User());
@@ -43,18 +44,21 @@ public class UserController {
         }
         return "redirect:/users/profile/" + foundUser.getId();
     }
+
     @GetMapping("/signup")
     public String showSignupForm(Model model) {
         model.addAttribute("user", new User());
         return "signup";
     }
+
     // Save new user
-    @PostMapping("/save")
+    @PostMapping("/savePost")
     public String saveUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/users/all";
 
     }
+
     // All Users page
     @GetMapping("/all")
     public String getAll(Model model) {
@@ -62,40 +66,83 @@ public class UserController {
         return "mainpage";
 
     }
+
     @GetMapping("/profile/{userId}")
-    public String userProfile(@PathVariable("userId") Long userId, Model model, HttpSession session) {
+    public String userProfile(@PathVariable("userId") Long userId, Model model) {
+
         User profile = userService.getUserById(userId);
         model.addAttribute("user", profile);
 
         UserInfo userInfo = profile.getUserInfo();
-        model.addAttribute("userInfo", userInfo);
+        model.addAttribute("userInfo", userInfo != null ? userInfo : new UserInfo());
 
-        Follower follower = profile.getFollowers();
-        model.addAttribute("follower", follower);
+        Follower follower = profile.getFollower();
+        model.addAttribute("follower", follower != null ? follower : new Follower());
 
         List<Post> posts = postService.getAllPostsByUserId(userId);
         model.addAttribute("posts", posts);
 
-        User currentUser = (User) session.getAttribute("currentUser");
-        boolean isSubscribed = false; // default
-        if (currentUser != null && !currentUser.getId().equals(userId)) {
-            isSubscribed = followerService.isSubscribed(currentUser.getId(), userId);
-        }
-        model.addAttribute("isSubscribed", isSubscribed);
-
         return "profilePage";
 
+
+
+
+
+
+
+
+
+
+
+
+//    }
+//    @GetMapping("/search")
+//    public String searchUsers(@RequestParam("keyword") String keyword, Model model) {
+//        List<User> users = userService.search(keyword);
+//        model.addAttribute("users", users);
+//        return "userSearch"; // Бул баракчада users тизмеси көрсөтүлөт
+//    }
+//    @GetMapping("/simple-profile/{id}")
+//    public String viewProfile(@PathVariable Long id, Model model) {
+//        User user = userService.findById(id);
+//        model.addAttribute("user", user);
+//        return "userProfile"; // же башка баракчанын аталышы
+//    }
     }
-    @GetMapping("/search")
-    public String searchUsers(@RequestParam("keyword") String keyword, Model model) {
-        List<User> users = userService.searchByUsername(keyword);
-        model.addAttribute("users", users);
-        return "userSearch"; // Бул баракчада users тизмеси көрсөтүлөт
-    }
-    @GetMapping("/simple-profile/{id}")
-    public String viewProfile(@PathVariable Long id, Model model) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        return "userProfile"; // же башка баракчанын аталышы
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //    @GetMapping("/profile/{userId}")
+//    public String userProfile(@PathVariable("userId") Long userId, Model model, HttpSession session) {
+//        User profile = userService.getUserById(userId);
+//        model.addAttribute("user", profile);
+//
+//        UserInfo userInfo = profile.getUserInfo();
+//        model.addAttribute("userInfo", userInfo);
+//
+//        Follower follower = profile.getFollower();
+//        model.addAttribute("follower", follower);
+
+//        List<Post> posts = postService.getAllPostsByUserId(userId);
+//        model.addAttribute("posts", posts);
+
+//        User currentUser = (User) session.getAttribute("currentUser");
+//        boolean isSubscribed = false; // default
+//        if (currentUser != null && !currentUser.getId().equals(userId)) {
+//            isSubscribed = followerService.isSubscribed(currentUser.getId(), userId);
+//        }
+//        model.addAttribute("isSubscribed", isSubscribed);
+
+//        return "profilePage";
 }

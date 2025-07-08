@@ -12,12 +12,13 @@ public class Follower {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "follower_gen")
     @SequenceGenerator(name = "follower_gen", sequenceName = "follower_seq",allocationSize = 1)
-
+private int subscribers = 0;
+    private int subscription = 0;
     private Long id;
     @ManyToMany
-    private List<User>subscribers = new ArrayList<>();
+    private List<User>subscribersList = new ArrayList<>();
     @ManyToMany
-    private List<User>subscription = new ArrayList<>();
+    private List<User>subscriptionList = new ArrayList<>();
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -25,8 +26,24 @@ public class Follower {
     public Follower() {
     }
 
-    public Follower(List<User> subscribers, List<User> subscription) {
+    public Follower(int subscribers, int subscription) {
         this.subscribers = subscribers;
+        this.subscription = subscription;
+    }
+
+    public int getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(int subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public int getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(int subscription) {
         this.subscription = subscription;
     }
 
@@ -38,20 +55,20 @@ public class Follower {
         this.id = id;
     }
 
-    public List<User> getSubscribers() {
-        return subscribers;
+    public List<User> getSubscribersList() {
+        return subscribersList;
     }
 
-    public void setSubscribers(List<User> subscribers) {
-        this.subscribers = subscribers;
+    public void setSubscribersList(List<User> subscribersList) {
+        this.subscribersList = subscribersList;
     }
 
-    public List<User> getSubscription() {
-        return subscription;
+    public List<User> getSubscriptionList() {
+        return subscriptionList;
     }
 
-    public void setSubscription(List<User> subscription) {
-        this.subscription = subscription;
+    public void setSubscriptionList(List<User> subscriptionList) {
+        this.subscriptionList = subscriptionList;
     }
 
     public User getUser() {

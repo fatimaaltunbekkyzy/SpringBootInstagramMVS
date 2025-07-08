@@ -1,13 +1,16 @@
 package peaksoft.springbootinstagrammvs.service.serviceImpl;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.stereotype.Service;
 import peaksoft.springbootinstagrammvs.entites.Follower;
 import peaksoft.springbootinstagrammvs.entites.User;
 import peaksoft.springbootinstagrammvs.entites.UserInfo;
+import peaksoft.springbootinstagrammvs.repo.FollowerRepo;
+import peaksoft.springbootinstagrammvs.repo.UserInfoRepo;
 import peaksoft.springbootinstagrammvs.repo.UserRepo;
-import peaksoft.springbootinstagrammvs.repo.repoImpl.FollowerRepo;
-import peaksoft.springbootinstagrammvs.repo.repoImpl.UserInfoRepo;
 import peaksoft.springbootinstagrammvs.service.UserService;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -15,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserInfoRepo userInfoRepo;
     private final FollowerRepo followerRepo;
 
-    public UserServiceImpl(UserRepo userRepo, UserInfoRepo userInfoRepo, FollowerRepo followerRepo) {
+    public UserServiceImpl(UserRepo userRepo, UserInfoRepo userInfoRepo,FollowerRepo followerRepo) {
         this.userRepo = userRepo;
         this.userInfoRepo = userInfoRepo;
         this.followerRepo = followerRepo;
@@ -23,23 +26,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User singUp(User user) {
-
-        User savedUser = userRepo.save(user);
+        if (!user.getPhone_number().startsWith("+996")) {
+            user.setPhone_number("+996" + user.getPhone_number());
+        }
 
         UserInfo userInfo = new UserInfo();
-        userInfoRepo.save(userInfo);
+        userInfo.setUser(user);
+        user.setUserInfo(userInfo);
 
         Follower follower = new Follower();
-        followerRepo.save(follower);
+        follower.setUser(user);
+        follower.setSubscribers(0);
+        follower.setSubscription(0);
+        follower.setSubscribersList(new ArrayList<>());
+        follower.setSubscriptionList(new ArrayList<>());
+        user.setFollower(follower);
 
-        savedUser.setUserInfo(userInfo);
-        savedUser.setFollower(follower);
-        return userRepo.save(savedUser);
+        userInfoRepo.save(userInfo);
+        followerRepo.save(follower);
+        return userRepo.save(user);
+
     }
 
     @Override
     public User signIn(User user) {
-        return null;
+        return userRepo.signIn(user.getEmail(), user.getPassword())
+                .orElse(null);
     }
 
     @Override
@@ -74,16 +86,56 @@ public class UserServiceImpl implements UserService {
 userRepo.deleteById(id);
     }
 
+
+//    @Override
+//    public List<User> search(String username) {
+//        return userRepo.search(username);
+//
+//    }
+//
     @Override
-    public List<User> getUserProfile() {
-        return List.of();
+    public User getUserById(Long userId) {
+        return userRepo.findById(userId).orElseThrow(()->
+                new NullPointerException(String.format("User with id %s not found", userId)));
     }
 
     @Override
-    public List<User> searchByUsername(String username) {
-        return null;
-//        return userRepo.findByUser_UsernameContainingIgnoreCase(username);
+    public User getCurrentUser() {
+        return  null;
+    }}
 
-    }
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        User savedUser = userRepo.save(user);
+//
+//        UserInfo userInfo = new UserInfo();
+//        userInfoRepo.save(userInfo);
+//
+//        Follower follower = new Follower();
+//        followerRepo.save(follower);
+//
+//        savedUser.setUserInfo(userInfo);
+//        savedUser.setFollower(follower);
+//        return userRepo.save(savedUser);

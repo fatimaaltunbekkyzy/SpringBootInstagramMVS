@@ -25,7 +25,7 @@ public class SpringBootInstagramMvsApplication {
 //            userService.deleteUser(4L);
 //            System.out.println(userService.getAllUser());
 //            System.out.println(userService.findById(1L));
-            System.out.println(userService.searchByUsername("Safia"));
+//            System.out.println(userService.search("Safia"));
         };
     }
 }

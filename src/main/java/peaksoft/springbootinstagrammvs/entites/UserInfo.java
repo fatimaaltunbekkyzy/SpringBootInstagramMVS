@@ -13,6 +13,7 @@ public class UserInfo {
     private Long id;
     private String firstName;
     private String biography;
+//    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String imageUrl;
     @OneToOne

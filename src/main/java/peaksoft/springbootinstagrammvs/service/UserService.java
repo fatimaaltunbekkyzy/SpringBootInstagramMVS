@@ -22,10 +22,11 @@ public interface UserService {
     void deleteUser(Long id);
     //TODO KOSHYMCHA METHODS
 
-    List<User>getUserProfile();
+//    List<User>getUserProfile();
 
-    List<User> searchByUsername(String username);
-
+//    List<User> search(String username);
 
     User getUserById(Long userId);
+
+    User getCurrentUser();
 }

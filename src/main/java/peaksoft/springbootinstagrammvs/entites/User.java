@@ -2,6 +2,8 @@ package peaksoft.springbootinstagrammvs.entites;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="users")
 public class User {
@@ -17,8 +19,13 @@ public class User {
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private UserInfo userInfo;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Follower follower;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts;
+
     public User() {
     }
 
@@ -83,6 +90,14 @@ public class User {
 
     public void setFollower(Follower follower) {
         this.follower = follower;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override

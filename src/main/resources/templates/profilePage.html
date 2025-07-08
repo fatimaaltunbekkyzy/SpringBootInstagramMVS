@@ -8,7 +8,7 @@
 
     <style>
         body {
-            background-color: #fafafa;
+            background-color: rgba(250, 250, 250, 0.11);
             font-family: 'Segoe UI', sans-serif;
         }
 
@@ -17,7 +17,7 @@
             align-items: center;
             gap: 30px;
             padding: 30px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.07);
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
@@ -26,7 +26,7 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 3px solid #ddd;
+            border: 3px solid rgba(221, 221, 221, 0.18);
             object-fit: cover;
         }
 
@@ -51,7 +51,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.16);
             transition: transform 0.2s;
         }
 
@@ -82,7 +82,7 @@
 
         .post-date {
             font-size: 12px;
-            color: #999;
+            color: rgba(153, 153, 153, 0.2);
         }
     </style>
 </head>
@@ -90,29 +90,29 @@
 
 <div class="container mt-5">
     <div class="profile-header">
-        <img th:src="${userInfo.image_url}" alt="Profile" class="profile-img">
+        <img th:src="${userInfo.imageUrl}" alt="Profile" class="profile-img">
         <div class="profile-info">
-            <h3 th:text="${user.userName}">username</h3>
-            <p th:text="${userInfo.first_name}">Full Name</p>
-            <p>Subscribers: <span th:text="${follower.subscribers}">0</span> | Subscriptions: <span th:text="${follower.subscriptions}">0</span></p>
+            <h3 th:text="${user.username}">username</h3>
+            <p th:text="${userInfo.firstName}">Full Name</p>
+            <p>Subscribers: <span th:text="${follower.subscribers}">0</span> | Subscriptions: <span th:text="${follower.subscribers}">0</span></p>
             <div class="profile-buttons mt-2">
-                <a th:href="@{/followers/{userId}/subscribers(userId=${user.id})}" class="btn btn-outline-primary btn-sm">Subscribers</a>
-                <a th:href="@{/followers/{userId}/subscriptions(userId=${user.id})}" class="btn btn-outline-secondary btn-sm">Subscriptions</a>
+                <a th:href="@{/follower/{userId}/subscribers(userId=${user.id})}" class="btn btn-outline-primary btn-sm">Subscribers</a>
+                <a th:href="@{/follower/{userId}/subscriptions(userId=${user.id})}" class="btn btn-outline-secondary btn-sm">Subscriptions</a>
                 <a href="/posts/new" class="btn btn-success btn-sm">+ Create Post</a>
             </div>
         </div>
     </div>
 
-    <!-- Posts Grid -->
+     Posts Grid
     <div class="posts-section">
         <h4 class="mb-4">User's Posts</h4>
         <div class="row" th:if="${posts != null}">
             <div class="col-md-4 mb-4" th:each="post : ${posts}">
                 <div class="post-card">
-                    <img th:src="${post.images[0]?.imageUrl}" class="post-img" th:if="${post.images != null and post.images.size() > 0}" alt="Post Image">
+<!--                    <img th:src="${post.images[0]?.imageUrl}" class="post-img" th:if="${post.images != null and post.images.size() > 0}" alt="Post Image">-->
                     <div class="post-body">
                         <p class="post-description" th:text="${post.description}">Post Description...</p>
-                        <p class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">Date</p>
+                        <p class="post-date" th:text="${#temporals.format(post.cratedAt, 'yyyy-MM-dd HH:mm')}">Date</p>
 
                         <div class="d-flex gap-2 mt-2">
                             <a th:href="@{/posts/editPost/{id}(id=${post.id})}" class="btn btn-warning btn-sm">Edit</a>
